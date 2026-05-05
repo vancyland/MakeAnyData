@@ -9,6 +9,530 @@
       content="DataClaw turns raw inputs into user-intent-aligned, trainable multimodal data."
     />
     <link rel="stylesheet" href="./styles.css?v=evaltable01" />
+
+    <style>
+      /*
+        Case overview replacement styles.
+        This section is intentionally self-contained so you can test it
+        without changing your existing styles.css first.
+      */
+
+      .cases-section.case-overview-section {
+        max-width: 1520px;
+      }
+
+      .case-overview-board {
+        position: relative;
+        width: 100%;
+        margin-top: 34px;
+        border: 1px solid rgba(170, 196, 255, 0.24);
+        border-radius: 32px;
+        background:
+          radial-gradient(circle at 22% 0%, rgba(88, 240, 255, 0.14), transparent 36%),
+          radial-gradient(circle at 78% 0%, rgba(167, 139, 250, 0.15), transparent 36%),
+          linear-gradient(135deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.032)),
+          rgba(7, 10, 24, 0.86);
+        box-shadow:
+          0 28px 90px rgba(0, 0, 0, 0.38),
+          inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+      }
+
+      .case-overview-board::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.42;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+        background-size: 38px 38px;
+        mask-image: radial-gradient(circle at center, black 0%, transparent 76%);
+      }
+
+      .case-overview-board > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .case-overview-header {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 28px;
+        align-items: end;
+        padding: 30px 34px 24px;
+        border-bottom: 1px solid rgba(170, 196, 255, 0.16);
+      }
+
+      .case-overview-header h3 {
+        margin: 0;
+        color: #eef4ff;
+        font-size: clamp(30px, 3.6vw, 54px);
+        line-height: 0.98;
+        letter-spacing: -0.055em;
+      }
+
+      .case-overview-header h3 span {
+        display: block;
+        margin-top: 7px;
+        background: linear-gradient(90deg, #ffffff 0%, #bdd2ff 42%, #72efff 100%);
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .case-overview-copy {
+        margin: 0;
+        color: #aab6d8;
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .case-overview-copy strong {
+        color: #eef4ff;
+      }
+
+      .case-pipeline-strip {
+        padding: 24px 34px 28px;
+        border-bottom: 1px solid rgba(170, 196, 255, 0.16);
+        background:
+          linear-gradient(90deg, rgba(88, 240, 255, 0.05), transparent 28%, transparent 72%, rgba(167, 139, 250, 0.06)),
+          rgba(255, 255, 255, 0.015);
+      }
+
+      .case-pipeline-row {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        align-items: stretch;
+        gap: 14px;
+      }
+
+      .case-pipeline-node {
+        min-height: 92px;
+        padding: 16px 18px;
+        border: 1px solid rgba(170, 196, 255, 0.18);
+        border-radius: 22px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.032)),
+          rgba(14, 21, 44, 0.74);
+        box-shadow:
+          0 16px 44px rgba(0, 0, 0, 0.22),
+          inset 0 1px 0 rgba(255, 255, 255, 0.09);
+      }
+
+      .case-pipeline-node span {
+        display: block;
+        margin-bottom: 8px;
+        color: #58f0ff;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .case-pipeline-node h4 {
+        margin: 0 0 6px;
+        color: #eef4ff;
+        font-size: 22px;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+      }
+
+      .case-pipeline-node p {
+        margin: 0;
+        color: #aab6d8;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .case-pipeline-plus {
+        align-self: center;
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 999px;
+        border: 1px solid rgba(170, 196, 255, 0.26);
+        background: rgba(255, 255, 255, 0.055);
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: 900;
+        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.25);
+      }
+
+      .case-pipeline-arrow {
+        align-self: center;
+        width: 58px;
+        height: 2px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(88, 240, 255, 0.18), rgba(88, 240, 255, 0.96));
+        position: relative;
+        box-shadow: 0 0 18px rgba(88, 240, 255, 0.42);
+      }
+
+      .case-pipeline-arrow::after {
+        content: "";
+        position: absolute;
+        right: -1px;
+        top: 50%;
+        width: 10px;
+        height: 10px;
+        border-top: 2px solid rgba(88, 240, 255, 0.96);
+        border-right: 2px solid rgba(88, 240, 255, 0.96);
+        transform: translateY(-50%) rotate(45deg);
+      }
+
+      .case-dataclaw-core {
+        width: min(500px, 100%);
+        margin: 22px auto 0;
+        padding: 17px 22px;
+        text-align: center;
+        border: 1px solid rgba(88, 240, 255, 0.34);
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at 50% 0%, rgba(88, 240, 255, 0.2), transparent 58%),
+          linear-gradient(135deg, rgba(88, 240, 255, 0.13), rgba(167, 139, 250, 0.11)),
+          rgba(8, 14, 34, 0.9);
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+          0 22px 70px rgba(88, 240, 255, 0.1);
+      }
+
+      .case-dataclaw-core strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #eef4ff;
+        font-size: 28px;
+        line-height: 1;
+        letter-spacing: -0.045em;
+      }
+
+      .case-dataclaw-core span {
+        color: #aab6d8;
+        font-size: 13px;
+      }
+
+      /*
+        Key part:
+        five columns are always in one row for screenshot.
+        On narrow screens it will horizontally scroll instead of wrapping.
+      */
+      .case-overview-grid-wrap {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 24px 24px 28px;
+      }
+
+      .case-overview-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(230px, 1fr));
+        gap: 14px;
+        min-width: 1240px;
+      }
+
+      .case-overview-card {
+        --accent: #58f0ff;
+        --accent-soft: rgba(88, 240, 255, 0.16);
+
+        position: relative;
+        min-height: 560px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(170, 196, 255, 0.2);
+        border-radius: 24px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.03)),
+          rgba(12, 18, 38, 0.86);
+        overflow: hidden;
+        box-shadow:
+          0 18px 48px rgba(0, 0, 0, 0.26),
+          inset 0 1px 0 rgba(255, 255, 255, 0.09);
+      }
+
+      .case-overview-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.95;
+        background:
+          radial-gradient(circle at 50% 0%, var(--accent-soft), transparent 42%),
+          linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.22) 100%);
+      }
+
+      .case-overview-card > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .case-overview-card.is-cooking {
+        --accent: #67f8b6;
+        --accent-soft: rgba(103, 248, 182, 0.17);
+      }
+
+      .case-overview-card.is-education {
+        --accent: #ffd166;
+        --accent-soft: rgba(255, 209, 102, 0.16);
+      }
+
+      .case-overview-card.is-gui {
+        --accent: #79a7ff;
+        --accent-soft: rgba(121, 167, 255, 0.18);
+      }
+
+      .case-overview-card.is-world {
+        --accent: #a78bfa;
+        --accent-soft: rgba(167, 139, 250, 0.18);
+      }
+
+      .case-overview-card.is-generation {
+        --accent: #ff7ad9;
+        --accent-soft: rgba(255, 122, 217, 0.18);
+      }
+
+      .case-overview-card-head {
+        padding: 18px 18px 14px;
+        border-bottom: 1px solid rgba(170, 196, 255, 0.13);
+      }
+
+      .case-overview-index {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 38px;
+        height: 24px;
+        margin-bottom: 11px;
+        border-radius: 999px;
+        border: 1px solid color-mix(in srgb, var(--accent) 56%, transparent);
+        background: color-mix(in srgb, var(--accent) 12%, transparent);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+      }
+
+      .case-overview-card-head h3 {
+        margin: 0;
+        color: #eef4ff;
+        font-size: 21px;
+        line-height: 1.03;
+        letter-spacing: -0.04em;
+      }
+
+      .case-overview-domain {
+        display: block;
+        margin-top: 8px;
+        color: #6f7ca7;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .case-overview-media {
+        position: relative;
+        height: 150px;
+        margin: 16px 16px 0;
+        border: 1px solid rgba(170, 196, 255, 0.16);
+        border-radius: 18px;
+        background: rgba(4, 8, 22, 0.78);
+        overflow: hidden;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 16px 34px rgba(0, 0, 0, 0.24);
+      }
+
+      .case-overview-media img,
+      .case-overview-media video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(1.05) contrast(1.03);
+      }
+
+      .case-overview-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(0, 0, 0, 0.08), transparent 36%, rgba(0, 0, 0, 0.22)),
+          radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 42%);
+      }
+
+      .case-overview-media-label {
+        position: absolute;
+        left: 10px;
+        top: 9px;
+        z-index: 3;
+        padding: 5px 8px;
+        border-radius: 999px;
+        background: rgba(4, 8, 22, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: rgba(238, 244, 255, 0.9);
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        backdrop-filter: blur(8px);
+      }
+
+      .case-overview-fallback {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        text-align: center;
+        color: #aab6d8;
+        font-size: 12px;
+        line-height: 1.45;
+        background:
+          radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 45%),
+          rgba(6, 10, 24, 0.96);
+      }
+
+      .case-overview-media.is-missing .case-overview-fallback {
+        display: flex;
+      }
+
+      .case-overview-media.is-missing img,
+      .case-overview-media.is-missing video {
+        display: none;
+      }
+
+      .case-overview-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 10px;
+        padding: 16px;
+      }
+
+      .case-overview-mini {
+        padding: 12px 12px;
+        border: 1px solid rgba(170, 196, 255, 0.14);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.042);
+      }
+
+      .case-overview-mini strong {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--accent);
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      .case-overview-mini p {
+        margin: 0;
+        color: #dce7ff;
+        font-size: 12px;
+        line-height: 1.43;
+      }
+
+      .case-overview-down {
+        display: grid;
+        place-items: center;
+        height: 24px;
+        color: var(--accent);
+        font-size: 20px;
+        font-weight: 900;
+        text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 60%, transparent);
+      }
+
+      .case-overview-output {
+        margin-top: auto;
+        border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+        background:
+          linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), rgba(255, 255, 255, 0.04));
+      }
+
+      .case-overview-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 2px;
+      }
+
+      .case-overview-tags span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 21px;
+        padding: 3px 7px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.052);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        color: rgba(238, 244, 255, 0.74);
+        font-size: 9px;
+        font-weight: 750;
+      }
+
+      .case-overview-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: center;
+        padding: 16px 28px 22px;
+        color: #6f7ca7;
+        font-size: 12px;
+        border-top: 1px solid rgba(170, 196, 255, 0.13);
+      }
+
+      .case-overview-footer-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .case-overview-footer-pills span {
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(170, 196, 255, 0.15);
+        background: rgba(255, 255, 255, 0.035);
+        color: #aab6d8;
+        font-weight: 750;
+      }
+
+      @media (max-width: 980px) {
+        .case-overview-header {
+          grid-template-columns: 1fr;
+        }
+
+        .case-pipeline-row {
+          grid-template-columns: 1fr;
+        }
+
+        .case-pipeline-plus,
+        .case-pipeline-arrow {
+          margin: 0 auto;
+        }
+
+        .case-pipeline-arrow {
+          width: 2px;
+          height: 38px;
+          background: linear-gradient(180deg, rgba(88, 240, 255, 0.18), rgba(88, 240, 255, 0.96));
+        }
+
+        .case-pipeline-arrow::after {
+          right: 50%;
+          top: auto;
+          bottom: -2px;
+          transform: translateX(50%) rotate(135deg);
+        }
+
+        .case-overview-footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="cursor-glow" aria-hidden="true"></div>
@@ -203,157 +727,318 @@
         </div>
       </section>
 
-      <section class="section cases-section" id="cases">
+      <section class="section cases-section case-overview-section" id="cases">
         <div class="section-head reveal">
           <p class="eyebrow">Case Gallery</p>
           <h2>One system, many kinds of data users may ask for.</h2>
         </div>
 
-        <div class="cases-layout">
-          <nav class="case-nav reveal" id="case-filter" aria-label="Case categories">
-            <button class="case-nav-item is-active" type="button" data-case-target="cooking" aria-controls="case-spotlight">
-              <span class="case-nav-title">Everyday Tutorials</span>
-            </button>
-            <button class="case-nav-item" type="button" data-case-target="geometry" aria-controls="case-spotlight">
-              <span class="case-nav-title">Education</span>
-            </button>
-            <button class="case-nav-item" type="button" data-case-target="gui" aria-controls="case-spotlight">
-              <span class="case-nav-title">GUI Agents</span>
-            </button>
-            <button class="case-nav-item" type="button" data-case-target="embodied" aria-controls="case-spotlight">
-              <span class="case-nav-title">World Model</span>
-            </button>
-            <button class="case-nav-item" type="button" data-case-target="editing" aria-controls="case-spotlight">
-              <span class="case-nav-title">Generation</span>
-            </button>
-          </nav>
+        <div class="case-overview-board reveal">
+          <div class="case-overview-header">
+            <div>
+              <p class="eyebrow">Figure-style Case Overview</p>
+              <h3>
+                DataClaw constructs trainable data
+                <span>from heterogeneous raw sources.</span>
+              </h3>
+            </div>
+            <p class="case-overview-copy">
+              A single intent-driven construction framework turns <strong>raw multimodal sources</strong>
+              and <strong>natural-language user intent</strong> into task-specific, trainable supervision
+              across diverse domains.
+            </p>
+          </div>
 
-          <aside class="case-spotlight reveal" id="case-spotlight">
-            <div class="spotlight-header">
-              <div class="spotlight-meta">
-                <span class="spotlight-index" id="spotlight-index">01</span>
-                <span class="spotlight-domain" id="spotlight-domain">Everyday Tutorials</span>
-              </div>
-              <div class="spotlight-copy">
-                <h3 id="spotlight-title">Cooking Tutorial from Raw Video</h3>
-                <p id="spotlight-summary">
-                  Turn a cooking-and-cleanup video into interleaved instructional data that feels like a real tutorial page.
-                </p>
-                <div class="case-subnav" id="case-subnav" hidden>
-                  <span class="case-subnav-label">Subcategory</span>
-                  <div class="case-subnav-controls">
-                    <button class="case-subnav-button" id="case-subnav-prev" type="button" aria-label="Previous subcategory">
-                      <span aria-hidden="true">‹</span>
-                    </button>
-                    <span class="case-subnav-current" id="case-subnav-current">Game Generation</span>
-                    <button class="case-subnav-button" id="case-subnav-next" type="button" aria-label="Next subcategory">
-                      <span aria-hidden="true">›</span>
-                    </button>
-                  </div>
-                  <span class="case-subnav-count" id="case-subnav-count">1 / 2</span>
+          <div class="case-pipeline-strip">
+            <div class="case-pipeline-row">
+              <article class="case-pipeline-node">
+                <span>Input A</span>
+                <h4>Raw Sources</h4>
+                <p>Video, image, GUI trace, robot demonstration, or drawing sequence.</p>
+              </article>
+
+              <div class="case-pipeline-plus" aria-hidden="true">+</div>
+
+              <article class="case-pipeline-node">
+                <span>Input B</span>
+                <h4>User Intent</h4>
+                <p>Natural-language request describing the desired trainable data form.</p>
+              </article>
+
+              <div class="case-pipeline-arrow" aria-hidden="true"></div>
+
+              <article class="case-pipeline-node">
+                <span>Output</span>
+                <h4>Trainable Data</h4>
+                <p>Structured labels, trajectories, temporal annotations, QA, or editing pairs.</p>
+              </article>
+            </div>
+
+            <div class="case-dataclaw-core">
+              <strong>DataClaw</strong>
+              <span>intent routing + task-specific synthesis agents</span>
+            </div>
+          </div>
+
+          <div class="case-overview-grid-wrap">
+            <div class="case-overview-grid">
+              <article class="case-overview-card is-cooking">
+                <div class="case-overview-card-head">
+                  <span class="case-overview-index">01</span>
+                  <h3>Everyday Tutorials</h3>
+                  <span class="case-overview-domain">video-to-tutorial data</span>
                 </div>
-              </div>
+
+                <figure class="case-overview-media">
+                  <span class="case-overview-media-label">cooking video</span>
+                  <video
+                    src="assets/cases/cooking.mp4"
+                    poster="assets/cases/cooking-poster.jpg"
+                    muted
+                    loop
+                    playsinline
+                    autoplay
+                    preload="metadata"
+                    onerror="this.closest('.case-overview-media').classList.add('is-missing')"
+                  ></video>
+                  <figcaption class="case-overview-fallback">
+                    Missing media:<br />
+                    assets/cases/cooking.mp4
+                  </figcaption>
+                </figure>
+
+                <div class="case-overview-body">
+                  <div class="case-overview-mini">
+                    <strong>Raw Source</strong>
+                    <p>Cooking or cleanup video with visible procedures, tools, and temporal evidence.</p>
+                  </div>
+
+                  <div class="case-overview-mini">
+                    <strong>User Intent</strong>
+                    <p>“Turn this video into an interleaved tutorial with step-by-step images and text.”</p>
+                  </div>
+
+                  <div class="case-overview-down" aria-hidden="true">↓</div>
+
+                  <div class="case-overview-mini case-overview-output">
+                    <strong>Constructed Data</strong>
+                    <p>Task description, selected frames, ordered instructions, and aligned image-text labels.</p>
+                  </div>
+
+                  <div class="case-overview-tags">
+                    <span>frame-text</span>
+                    <span>step ordering</span>
+                    <span>tutorial</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="case-overview-card is-education">
+                <div class="case-overview-card-head">
+                  <span class="case-overview-index">02</span>
+                  <h3>Education</h3>
+                  <span class="case-overview-domain">visual reasoning data</span>
+                </div>
+
+                <figure class="case-overview-media">
+                  <span class="case-overview-media-label">geometry board</span>
+                  <img
+                    src="assets/cases/education.png"
+                    alt="Geometry or education source example"
+                    loading="eager"
+                    onerror="this.closest('.case-overview-media').classList.add('is-missing')"
+                  />
+                  <figcaption class="case-overview-fallback">
+                    Missing media:<br />
+                    assets/cases/education.png
+                  </figcaption>
+                </figure>
+
+                <div class="case-overview-body">
+                  <div class="case-overview-mini">
+                    <strong>Raw Source</strong>
+                    <p>Lecture video, geometry diagram, board writing, or visual derivation process.</p>
+                  </div>
+
+                  <div class="case-overview-mini">
+                    <strong>User Intent</strong>
+                    <p>“Create educational reasoning QA from the visual derivation and intermediate steps.”</p>
+                  </div>
+
+                  <div class="case-overview-down" aria-hidden="true">↓</div>
+
+                  <div class="case-overview-mini case-overview-output">
+                    <strong>Constructed Data</strong>
+                    <p>Problem statement, visual references, intermediate reasoning, and solution supervision.</p>
+                  </div>
+
+                  <div class="case-overview-tags">
+                    <span>reasoning QA</span>
+                    <span>diagram</span>
+                    <span>solution</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="case-overview-card is-gui">
+                <div class="case-overview-card-head">
+                  <span class="case-overview-index">03</span>
+                  <h3>GUI Agents</h3>
+                  <span class="case-overview-domain">screen trace data</span>
+                </div>
+
+                <figure class="case-overview-media">
+                  <span class="case-overview-media-label">GUI trace</span>
+                  <img
+                    src="assets/cases/gui.png"
+                    alt="GUI interaction trace example"
+                    loading="eager"
+                    onerror="this.closest('.case-overview-media').classList.add('is-missing')"
+                  />
+                  <figcaption class="case-overview-fallback">
+                    Missing media:<br />
+                    assets/cases/gui.png
+                  </figcaption>
+                </figure>
+
+                <div class="case-overview-body">
+                  <div class="case-overview-mini">
+                    <strong>Raw Source</strong>
+                    <p>Screen recording or GUI interaction trace with clicks, typing, scrolling, and page states.</p>
+                  </div>
+
+                  <div class="case-overview-mini">
+                    <strong>User Intent</strong>
+                    <p>“Convert this trace into long-horizon GUI agent training tasks.”</p>
+                  </div>
+
+                  <div class="case-overview-down" aria-hidden="true">↓</div>
+
+                  <div class="case-overview-mini case-overview-output">
+                    <strong>Constructed Data</strong>
+                    <p>Goal instruction, screenshot sequence, action labels, and state-transition supervision.</p>
+                  </div>
+
+                  <div class="case-overview-tags">
+                    <span>goal</span>
+                    <span>actions</span>
+                    <span>screenshots</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="case-overview-card is-world">
+                <div class="case-overview-card-head">
+                  <span class="case-overview-index">04</span>
+                  <h3>World Model</h3>
+                  <span class="case-overview-domain">embodied rollout data</span>
+                </div>
+
+                <figure class="case-overview-media">
+                  <span class="case-overview-media-label">robot demo</span>
+                  <video
+                    src="assets/cases/world.mp4"
+                    poster="assets/cases/world-poster.jpg"
+                    muted
+                    loop
+                    playsinline
+                    autoplay
+                    preload="metadata"
+                    onerror="this.closest('.case-overview-media').classList.add('is-missing')"
+                  ></video>
+                  <figcaption class="case-overview-fallback">
+                    Missing media:<br />
+                    assets/cases/world.mp4
+                  </figcaption>
+                </figure>
+
+                <div class="case-overview-body">
+                  <div class="case-overview-mini">
+                    <strong>Raw Source</strong>
+                    <p>Robot trajectory, embodied demonstration, or sequential environment interaction.</p>
+                  </div>
+
+                  <div class="case-overview-mini">
+                    <strong>User Intent</strong>
+                    <p>“Construct predictive world-model data from the demonstration.”</p>
+                  </div>
+
+                  <div class="case-overview-down" aria-hidden="true">↓</div>
+
+                  <div class="case-overview-mini case-overview-output">
+                    <strong>Constructed Data</strong>
+                    <p>Observation-action-next-observation tuples, future states, and trajectory annotations.</p>
+                  </div>
+
+                  <div class="case-overview-tags">
+                    <span>rollout</span>
+                    <span>state</span>
+                    <span>prediction</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="case-overview-card is-generation">
+                <div class="case-overview-card-head">
+                  <span class="case-overview-index">05</span>
+                  <h3>Generation</h3>
+                  <span class="case-overview-domain">editing / synthesis data</span>
+                </div>
+
+                <figure class="case-overview-media">
+                  <span class="case-overview-media-label">image edit</span>
+                  <img
+                    src="assets/cases/generation.png"
+                    alt="Generation or image editing source example"
+                    loading="eager"
+                    onerror="this.closest('.case-overview-media').classList.add('is-missing')"
+                  />
+                  <figcaption class="case-overview-fallback">
+                    Missing media:<br />
+                    assets/cases/generation.png
+                  </figcaption>
+                </figure>
+
+                <div class="case-overview-body">
+                  <div class="case-overview-mini">
+                    <strong>Raw Source</strong>
+                    <p>Image, sketch, editing sequence, visual prompt, or paired generation material.</p>
+                  </div>
+
+                  <div class="case-overview-mini">
+                    <strong>User Intent</strong>
+                    <p>“Build generation or editing supervision from this source.”</p>
+                  </div>
+
+                  <div class="case-overview-down" aria-hidden="true">↓</div>
+
+                  <div class="case-overview-mini case-overview-output">
+                    <strong>Constructed Data</strong>
+                    <p>Edit instruction, source image, target image, transformation labels, or generation pairs.</p>
+                  </div>
+
+                  <div class="case-overview-tags">
+                    <span>edit pair</span>
+                    <span>prompt</span>
+                    <span>target</span>
+                  </div>
+                </div>
+              </article>
             </div>
+          </div>
 
-            <div class="case-chat-shell" id="case-chat-shell">
-              <div class="case-chat-topbar">
-                <span class="chat-topbar-dot"></span>
-                <span class="chat-topbar-dot"></span>
-                <span class="chat-topbar-dot"></span>
-                <p>Case Replay</p>
-              </div>
+          <div class="case-overview-footer">
+            <span>
+              DataClaw overview: raw multimodal evidence + user intent → task-specific trainable data.
+            </span>
 
-              <div class="case-chat-thread" id="case-chat-thread">
-                <article class="chat-message chat-message-user" data-chat-step="1">
-                  <div class="chat-avatar chat-avatar-user">You</div>
-                  <div class="chat-bubble chat-bubble-user">
-                    <div class="chat-upload-preview" id="case-input-preview">
-                      <video
-                        class="case-input-video"
-                        id="case-input-video"
-                        playsinline
-                        muted
-                        controls
-                        loop
-                        preload="metadata"
-                      ></video>
-                      <img class="case-input-poster" id="case-input-poster" alt="Uploaded video preview" hidden />
-                    </div>
-
-                    <div class="case-input-assets" id="case-input-assets" hidden></div>
-
-                    <div class="case-input-fallback" id="case-input-fallback">
-                      <p id="case-input-fallback-copy">A source asset is available for this case.</p>
-                    </div>
-
-                    <p class="chat-message-copy" id="case-input-intent">
-                      This is a cooking video. Turn it into interleaved tutorial data with step-by-step images and text.
-                    </p>
-                  </div>
-                </article>
-
-                <article class="chat-message chat-message-assistant" data-chat-step="2">
-                  <div class="chat-avatar chat-avatar-ai">DataClaw</div>
-                  <div class="chat-bubble chat-bubble-assistant">
-                    <div class="case-thought-head">
-                      <p class="chat-bubble-kicker">THOUGHT</p>
-                      <button
-                        class="case-thought-toggle"
-                        id="case-thought-toggle"
-                        type="button"
-                        aria-expanded="false"
-                        aria-controls="case-thought-panel"
-                      >
-                        <span id="case-thought-toggle-label">Show thoughts</span>
-                      </button>
-                    </div>
-                    <div class="case-thought-panel is-collapsed" id="case-thought-panel" hidden>
-                      <div class="chat-typing" id="case-typing-indicator" aria-hidden="true">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </div>
-
-                      <div class="case-thought-grid" id="case-thought-grid"></div>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="chat-message chat-message-assistant chat-message-output" data-chat-step="3">
-                  <div class="chat-avatar chat-avatar-ai">DataClaw</div>
-                  <div class="chat-bubble chat-bubble-assistant chat-bubble-output">
-                    <div class="chat-sample-card" id="case-output-card">
-                      <div class="case-output-field" id="case-output-task-field">
-                        <span class="case-output-label" id="case-output-task-label">TASK</span>
-                        <div class="case-task-preview" id="case-task-preview" hidden>
-                          <video
-                            id="case-task-video"
-                            playsinline
-                            muted
-                            controls
-                            loop
-                            preload="metadata"
-                            hidden
-                          ></video>
-                          <img id="case-task-poster" alt="Task source frame" />
-                        </div>
-                        <p class="case-output-question" id="case-output-question">
-                          This is my current situation: I am about to cook meat, and I am setting a timer to keep track of the cooking time. I want to know what I should do next.
-                        </p>
-                      </div>
-                      <div class="case-output-field" id="case-output-solution-field">
-                        <span class="case-output-label" id="case-output-solution-label">SOLUTION</span>
-                        <p class="case-output-text" id="case-output-text" hidden></p>
-                        <div class="case-output-gallery" id="case-output-gallery"></div>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              </div>
+            <div class="case-overview-footer-pills">
+              <span>intent-driven</span>
+              <span>multi-domain</span>
+              <span>schema-aware</span>
+              <span>trainable outputs</span>
             </div>
-
-            <div class="spotlight-tags" id="spotlight-tags"></div>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -542,5 +1227,20 @@
     </main>
 
     <script src="./app.js?v=evaltable01"></script>
+
+    <script>
+      /*
+        Keep videos quiet and looping for screenshot.
+        This does not change your original prompt/thought/case logic.
+      */
+      document.querySelectorAll(".case-overview-media video").forEach((video) => {
+        const playPromise = video.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(() => {
+            video.controls = false;
+          });
+        }
+      });
+    </script>
   </body>
 </html>
