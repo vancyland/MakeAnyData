@@ -3,10 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DataClaw | Make ANY Data You Want</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>DataClaw | Anonymous Project Page</title>
     <meta
       name="description"
-      content="DataClaw turns raw inputs into user-intent-aligned, trainable multimodal data."
+      content="Anonymous project page for DataClaw, an agentic framework that plans, verifies, and teaches from raw multimodal streams."
     />
     <link rel="stylesheet" href="./styles.css?v=evaltable01" />
   </head>
@@ -23,26 +29,26 @@
         <a href="#intro">Intro</a>
         <a href="#method">Method</a>
         <a href="#cases">Cases</a>
-        <a href="#validation">Validation</a>
       </nav>
     </header>
 
     <main>
       <section class="section hero" id="intro">
         <div class="hero-copy reveal">
-          <p class="eyebrow">User-Intent-Driven Data Construction</p>
+          <p class="eyebrow">Planning, verifying, and teaching from raw multimodal streams</p>
           <h1 class="hero-title">
             DataClaw:
-            <span>Make ANY Data You Want</span>
+            <span>Agentic Data Tailoring</span>
           </h1>
           <p class="hero-subtitle">
-            Turn raw inputs into user-intent-aligned, trainable multimodal data.
+            Construct intent-aligned supervision by deciding what evidence to acquire,
+            what to write, and when a record is ready to teach.
           </p>
           <p class="hero-text">
-            DataClaw is built around a simple premise: users do not want a fixed dataset recipe.
-            They want the exact data form that matches their downstream goal. From videos, images,
-            GUI traces, robot trajectories, and more, DataClaw infers intent and composes the right
-            trainable output.
+            Given a raw stream and construction intent, DataClaw plans evidence requirements,
+            calls typed visual and structured-data tools, drafts structured supervision, and
+            verifies or revises the result before stopping. Provenance-aware anchors enforce
+            factual support, while learner feedback favors records that improve downstream training.
           </p>
           <div class="hero-actions">
             <a class="button button-primary" href="#cases">Explore Cases</a>
@@ -50,16 +56,16 @@
           </div>
           <div class="hero-stats">
             <article class="stat-card">
-              <strong>Multi-Domain</strong>
-              <span>tutorials, education, GUI, robotics, generation</span>
+              <strong>Plan</strong>
+              <span>decompose each requested schema into unresolved evidence needs</span>
             </article>
             <article class="stat-card">
-              <strong>Intent-Driven</strong>
-              <span>construct data based on what the user actually wants</span>
+              <strong>Verify</strong>
+              <span>ground every accepted claim in provenance-bearing anchors</span>
             </article>
             <article class="stat-card">
-              <strong>Trainable</strong>
-              <span>outputs are structured for downstream training rather than demo-only generation</span>
+              <strong>Teach</strong>
+              <span>prefer valid records aligned with downstream learner improvement</span>
             </article>
           </div>
         </div>
@@ -69,30 +75,31 @@
           <div class="hero-orbit hero-orbit-one"></div>
           <div class="hero-orbit hero-orbit-two"></div>
           <article class="hero-panel hero-panel-wide">
-            <p class="panel-kicker">Raw Inputs</p>
-            <h3>Video, image, GUI trace, robot demo, drawing sequence</h3>
-            <p>Ordinary materials enter the system without being pre-shaped into a single dataset template.</p>
+            <p class="panel-kicker">Raw Streams</p>
+            <h3>Video, GUI trace, robot trajectory, and editing sequence</h3>
+            <p>Long heterogeneous streams enter without pre-selected evidence or a fixed tool route.</p>
           </article>
           <article class="hero-panel hero-panel-top">
-            <p class="panel-kicker">User Intent</p>
-            <p>What kind of data does the user actually want to build from this material?</p>
+            <p class="panel-kicker">Construction Intent</p>
+            <p>The requested schema determines which evidence and verification steps are necessary.</p>
           </article>
           <article class="hero-panel hero-panel-mid">
-            <p class="panel-kicker">Constructed Outputs</p>
-            <p>Interleaved tutorials, temporal QA, long-horizon GUI tasks, world-model samples, editing data.</p>
+            <p class="panel-kicker">Teaching Records</p>
+            <p>Verified tutorials, temporal QA, GUI trajectories, embodied recovery, and generation conditions.</p>
           </article>
-          <div class="hero-chip hero-chip-left">Intent First</div>
-          <div class="hero-chip hero-chip-right">Case Scalable</div>
+          <div class="hero-chip hero-chip-left">Plan &rarr; Act</div>
+          <div class="hero-chip hero-chip-right">Verify &rarr; Revise</div>
         </div>
       </section>
 
       <section class="section method-section" id="method">
         <div class="section-head reveal">
           <p class="eyebrow">Method</p>
-          <h2>Raw video and user intent are merged once, then dispatched by task type.</h2>
+          <h2>Adapt the evidence path to each intent instead of replaying one fixed workflow.</h2>
           <p class="section-copy">
-            DataClaw first resolves user intent into typed instructions, then combines that instruction with the raw
-            video context in one shared route before dispatching parallel synthesis models.
+            DataClaw decomposes the requested schema into evidence needs, acquires only unresolved
+            evidence through typed tools, drafts a structured record, and revises it when factual
+            or structural checks fail.
           </p>
         </div>
 
@@ -105,64 +112,64 @@
           </div>
 
           <article class="flow-card flow-card-video flow-card-data" data-flow-focus="video" data-flow-group="video" tabindex="0">
-            <h3>Raw Video</h3>
-            <p>Full source video with actions, frames, and temporal evidence.</p>
+            <h3>Raw Stream</h3>
+            <p>Full video, GUI session, or embodied trajectory with no pre-selected evidence.</p>
           </article>
           <article class="flow-card flow-card-query flow-card-data" data-flow-focus="source-intent" data-flow-group="source-intent" tabindex="0">
-            <h3>User Intent</h3>
-            <p>Natural-language request that may still be broad or ambiguous.</p>
+            <h3>Intent + Schema</h3>
+            <p>The requested training record and its domain-specific structural constraints.</p>
           </article>
 
           <article class="flow-card flow-card-intent flow-card-agent" data-flow-focus="intent-agent" data-flow-group="intent-agent" tabindex="0">
-            <h3>User Intent Agent</h3>
-            <p>Infer candidate task types and rewrite each candidate into a clear, synthesis-ready instruction.</p>
+            <h3>Planning Policy</h3>
+            <p>Decompose the schema into evidence needs and decide which observations are still missing.</p>
             <div class="flow-mini-tags">
-              <span>task typing</span>
-              <span>instruction rewriting</span>
-              <span>ambiguity preserved</span>
+              <span>plan</span>
+              <span>tool choice</span>
+              <span>budget aware</span>
             </div>
           </article>
 
           <article class="flow-card flow-task-type flow-task-type-a flow-card-data" tabindex="0">
-            <span class="flow-chip">Task Type A</span>
-            <h3>Tutorial</h3>
-            <p>Interleaved tutorial-style supervision.</p>
+            <span class="flow-chip">Need A</span>
+            <h3>Temporal</h3>
+            <p>Locate decisive intervals, state changes, and event order.</p>
           </article>
           <article class="flow-card flow-task-type flow-task-type-b flow-card-data" tabindex="0">
-            <span class="flow-chip">Task Type B</span>
-            <h3>Temporal</h3>
-            <p>Ordering, localization, and state-change reasoning.</p>
+            <span class="flow-chip">Need B</span>
+            <h3>Perception</h3>
+            <p>Resolve text, objects, spatial support, and tracked motion.</p>
           </article>
           <article class="flow-card flow-task-type flow-task-type-more flow-card-data" tabindex="0">
-            <span class="flow-chip">...</span>
-            <h3>More Types</h3>
-            <p>Additional task classes can be inferred from the same intent.</p>
+            <span class="flow-chip">Need C</span>
+            <h3>Structured State</h3>
+            <p>Recover GUI events, metadata, logs, or proprioception.</p>
           </article>
 
           <article class="flow-card flow-task-agent flow-task-agent-a flow-card-agent" tabindex="0">
-            <h3>Tutorial Agent</h3>
-            <p>Use the task-specific synthesis agent selected for tutorial supervision.</p>
+            <h3>Temporal Tools</h3>
+            <p>Seek, segment, and retrieve event-aware frames on demand.</p>
           </article>
           <article class="flow-card flow-task-agent flow-task-agent-b flow-card-agent" tabindex="0">
-            <h3>Temporal Agent</h3>
-            <p>Use the task-specific synthesis agent selected for temporal reasoning data.</p>
+            <h3>Perception Tools</h3>
+            <p>Invoke OCR, ASR, detection, and tracking only when needed.</p>
           </article>
           <article class="flow-card flow-task-agent flow-task-agent-more flow-card-agent" tabindex="0">
-            <h3>More Agents</h3>
-            <p>Attach more specialized agents for other task types when needed.</p>
+            <h3>State Parsers</h3>
+            <p>Read exact structured observations from available traces and logs.</p>
           </article>
 
           <article class="flow-card flow-output flow-output-tutorial flow-card-data" tabindex="0">
-            <h3>Tutorial Data</h3>
-            <p>Task description + frame-text labels.</p>
+            <h3>Draft</h3>
+            <p>Construct an intent-conditioned record in the requested schema.</p>
           </article>
           <article class="flow-card flow-output flow-output-temporal flow-card-data" tabindex="0">
-            <h3>Temporal Data</h3>
-            <p>Task description + timestamped image-text labels.</p>
+            <h3>Verify / Revise</h3>
+            <p>Check provenance, factual consistency, and structural validity.</p>
           </article>
           <article class="flow-card flow-output flow-output-more flow-card-data" tabindex="0">
-            <h3>More Task Data</h3>
-            <p>Additional task description + multimodal labels for more task classes.</p>
+            <h3>Teaching Record</h3>
+            <p>Return accepted supervision with evidence and an auditable tool trace.</p>
           </article>
 
           <svg class="flow-svg" viewBox="0 0 1240 1120" preserveAspectRatio="none" aria-hidden="true">
@@ -357,7 +364,7 @@
         </div>
       </section>
 
-      <section class="section validation-section" id="validation">
+      <section class="section validation-section" id="validation" hidden>
         <div class="section-head reveal">
           <p class="eyebrow">Evaluation</p>
           <h2>We test both benchmark reconstruction and benchmark augmentation.</h2>
@@ -539,6 +546,10 @@
           </div>
         </div>
       </section>
+
+      <footer class="anonymous-review-note">
+        <p>Anonymous project page prepared for double-blind review.</p>
+      </footer>
     </main>
 
     <script src="./app.js?v=evaltable01"></script>
